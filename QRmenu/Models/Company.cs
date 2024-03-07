@@ -52,6 +52,7 @@ namespace QRmenu.Models
 		public Status? Status { get; set; }
 
 		public List<Restaurant>? Restaurants { get; set; }
+		public List<User>? Users { get; set; }
     }
 }
 

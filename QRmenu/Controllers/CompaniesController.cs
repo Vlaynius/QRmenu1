@@ -140,10 +140,14 @@ namespace QRmenu
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Company? company = _context.Companies!.Where(c => c.Id == id).Include(c => c.Restaurants)!.ThenInclude(c=> c.Categories).FirstOrDefault();
+            Company? company = _context.Companies!.Where(c => c.Id == id).Include(c=>c.Users).Include(c => c.Restaurants)!.ThenInclude(c=> c.Categories).FirstOrDefault();
             if(company != null)
             {
                 company.StatusId = 0;
+                foreach(User user in company.Users!)
+                {
+                    user.StatusId = 0;
+                }
                 foreach(Restaurant rest in company.Restaurants!)
                 {
                     rest.StatusId = 0;
