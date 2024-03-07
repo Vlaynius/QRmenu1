@@ -201,6 +201,57 @@ namespace QRmenu.Migrations
                     b.ToTable("Statuses");
                 });
 
+            modelBuilder.Entity("QRmenu.Models.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("varchar(30)");
+
+                    b.Property<DateTime>("RegisterDate")
+                        .HasColumnType("smalldatetime");
+
+                    b.Property<byte>("StatusId")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("StatusId");
+
+                    b.ToTable("Users");
+                });
+
             modelBuilder.Entity("QRmenu.Models.Category", b =>
                 {
                     b.HasOne("QRmenu.Models.Restaurant", "Restaurant")
@@ -251,6 +302,25 @@ namespace QRmenu.Migrations
                 });
 
             modelBuilder.Entity("QRmenu.Models.Restaurant", b =>
+                {
+                    b.HasOne("QRmenu.Models.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("QRmenu.Models.Status", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Company");
+
+                    b.Navigation("Status");
+                });
+
+            modelBuilder.Entity("QRmenu.Models.User", b =>
                 {
                     b.HasOne("QRmenu.Models.Company", "Company")
                         .WithMany()
