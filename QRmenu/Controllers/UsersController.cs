@@ -124,16 +124,13 @@ namespace QRmenu.Controllers
         }
 
         // GET: Users/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public  ActionResult Delete(int id)
         {
-            if (id == null || _context.Users == null)
-            {
-                return NotFound();
-            }
+            
 
-            var user = await _context.Users
+            User? user =  _context.Users!
                 .Include(u => u.Status)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefault(m => m.Id == id);
             if (user == null)
             {
                 return NotFound();
@@ -145,25 +142,41 @@ namespace QRmenu.Controllers
         // POST: Users/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(int id)
         {
-            if (_context.Users == null)
-            {
-                return Problem("Entity set 'ApplicationContext.Users'  is null.");
-            }
-            var user = await _context.Users.FindAsync(id);
-            if (user != null)
-            {
-                _context.Users.Remove(user);
-            }
-            
-            await _context.SaveChangesAsync();
+           
+            User? user =  _context.Users!.Find(id)!;
+            user.StatusId = 0;
+            _context.Users.Update(user);
+            _context.SaveChanges();
+
+            _context.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
 
         private bool UserExists(int id)
         {
           return (_context.Users?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+
+        public ViewResult Login()
+        {
+
+            return View();
+        }
+
+
+        [HttpPost]
+        public RedirectToActionResult Login(string userName, string password)
+        {
+            Models.User? appUser = _context.Users!.Where(u => u.UserName == userName && u.Password == password).FirstOrDefault();
+            if ( appUser == null)
+            {
+                return RedirectToAction("Login");    //Hata
+            }
+
+            HttpContext.Session.SetInt32("userId", appUser.Id);
+            return RedirectToAction("Index", "Foods");
         }
     }
 }

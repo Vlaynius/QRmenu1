@@ -70,7 +70,7 @@ namespace QRmenu.Migrations
                         column: x => x.CompanyId,
                         principalTable: "Companies",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Restaurants_Statuses_StatusId",
                         column: x => x.StatusId,
@@ -102,7 +102,7 @@ namespace QRmenu.Migrations
                         column: x => x.CompanyId,
                         principalTable: "Companies",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Users_Statuses_StatusId",
                         column: x => x.StatusId,
@@ -129,7 +129,7 @@ namespace QRmenu.Migrations
                         column: x => x.RestaurantId,
                         principalTable: "Restaurants",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Categories_Statuses_StatusId",
                         column: x => x.StatusId,
@@ -158,7 +158,7 @@ namespace QRmenu.Migrations
                         column: x => x.CategoryId,
                         principalTable: "Categories",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Foods_Statuses_StatusId",
                         column: x => x.StatusId,

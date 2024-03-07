@@ -129,17 +129,12 @@ namespace QRmenu.Controllers
         }
 
         // GET: Restaurants/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public  ActionResult Delete(int id)
         {
-            if (id == null || _context.Restaurants == null)
-            {
-                return NotFound();
-            }
+            //Food? food = _context.Foods!.Where(f => f.Id == id).Include(f => f.Status).FirstOrDefault();
 
-            var restaurant = await _context.Restaurants
-                .Include(r => r.Company)
-                .Include(r => r.Status)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            Restaurant? restaurant = _context.Restaurants!.Where(r => r.Id == id).Include(r => r.Company).Include(r => r.Status).FirstOrDefault();
+                
             if (restaurant == null)
             {
                 return NotFound();
@@ -151,19 +146,13 @@ namespace QRmenu.Controllers
         // POST: Restaurants/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(int id)
         {
-            if (_context.Restaurants == null)
-            {
-                return Problem("Entity set 'ApplicationContext.Restaurants'  is null.");
-            }
-            var restaurant = await _context.Restaurants.FindAsync(id);
-            if (restaurant != null)
-            {
-                _context.Restaurants.Remove(restaurant);
-            }
             
-            await _context.SaveChangesAsync();
+            Restaurant restaurant =  _context.Restaurants!.Find(id)!;
+            restaurant.StatusId = 0;
+            _context.Restaurants!.Update(restaurant);
+            _context.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
 

@@ -12,7 +12,7 @@ public class Program
         builder.Services.AddControllersWithViews();
         builder.Services.AddDbContext<Data.ApplicationContext>(options =>
                  options.UseSqlServer(builder.Configuration.GetConnectionString("ApplicationDatabase")));
-
+        builder.Services.AddSession();
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
@@ -30,6 +30,8 @@ public class Program
             name: "default",
             pattern: "{controller=Home}/{action=Index}/{id?}");
 
+        //app.UseSession();
+        app.UseSession();
         app.Run();
     }
 }

@@ -128,17 +128,13 @@ namespace QRmenu.Controllers
         }
 
         // GET: Categories/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public ActionResult Delete(int id)
         {
-            if (id == null || _context.Categories == null)
-            {
-                return NotFound();
-            }
-
-            var category = await _context.Categories
+            
+            Category? category = _context.Categories!
                 .Include(c => c.Restaurant)
                 .Include(c => c.Status)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefault(m => m.Id == id);
             if (category == null)
             {
                 return NotFound();
@@ -150,19 +146,13 @@ namespace QRmenu.Controllers
         // POST: Categories/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public  ActionResult DeleteConfirmed(int id)
         {
-            if (_context.Categories == null)
-            {
-                return Problem("Entity set 'ApplicationContext.Categories'  is null.");
-            }
-            var category = await _context.Categories.FindAsync(id);
-            if (category != null)
-            {
-                _context.Categories.Remove(category);
-            }
             
-            await _context.SaveChangesAsync();
+            Category? category =  _context.Categories!.Find(id)!;
+            category.StatusId = 0;
+            _context.Categories.Update(category);
+             _context.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
 

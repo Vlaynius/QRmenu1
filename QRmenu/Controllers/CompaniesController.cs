@@ -121,15 +121,10 @@ namespace QRmenu
         }
 
         // GET: Companies/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public ActionResult Delete(int id)
         {
-            if (id == null || _context.Companies == null)
-            {
-                return NotFound();
-            }
-
-            var company = await _context.Companies
-                .FirstOrDefaultAsync(m => m.Id == id);
+            Company? company = _context.Companies!.Where(c => c.Id == id).Include(f => f.Status).FirstOrDefault();
+            
             if (company == null)
             {
                 return NotFound();
@@ -141,19 +136,13 @@ namespace QRmenu
         // POST: Companies/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(int id)
         {
-            if (_context.Companies == null)
-            {
-                return Problem("Entity set 'AppContext.Company'  is null.");
-            }
-            var company = await _context.Companies.FindAsync(id);
-            if (company != null)
-            {
-                _context.Companies.Remove(company);
-            }
             
-            await _context.SaveChangesAsync();
+            Company company = _context.Companies!.Find(id)!;
+            company.StatusId = 0;
+            _context.Companies.Update(company);
+            _context.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
 

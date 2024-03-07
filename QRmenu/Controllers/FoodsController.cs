@@ -17,21 +17,17 @@ namespace QRmenu.Controllers
 		{
 			_context = context;
 		}
-        /*
+        
         // GET: Foods
-		public ViewResult Index()
-		{
-			return View(_context.Foods!.Where(f => f.StatusId == 1).ToList());
-		}*/
-
-        public ViewResult Index( bool admin =  false)
+        public ActionResult Index()
         {
             IQueryable<Food> foods = _context.Foods!;
-            if(admin == false)
+            int? userId = HttpContext.Session.GetInt32("userId");
+            if (userId == null)
             {
                 foods = foods.Where(f => f.StatusId == 1);
             }
-            ViewData["admin"] = admin;
+            ViewData["admin"] = userId;
             return View(foods.ToList());
         }
 

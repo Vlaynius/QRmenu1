@@ -14,5 +14,12 @@ namespace QRmenu.Data
 		public DbSet<Category>? Categories { get; set; }
 		public DbSet<Restaurant>? Restaurants { get; set; }
         public DbSet<User>? Users { get; set; }
+
+		/*
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
+		{
+			modelBuilder.Entity<User>
+		}
+		*/
     }
 }
