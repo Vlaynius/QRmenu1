@@ -22,9 +22,11 @@ namespace QRmenu
         // GET: Companies
         public async Task<IActionResult> Index()
         {
-              return _context.Companies != null? 
+          
+            return _context.Companies != null? 
                           View(await _context.Companies.ToListAsync()) :
                           Problem("Entity set 'AppContext.Company'  is null.");
+
         }
 
         // GET: Companies/Details/5
@@ -138,10 +140,25 @@ namespace QRmenu
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            
-            Company company = _context.Companies!.Find(id)!;
-            company.StatusId = 0;
-            _context.Companies.Update(company);
+            Company? company = _context.Companies!.Where(c => c.Id == id).Include(c => c.Restaurants)!.ThenInclude(c=> c.Categories).FirstOrDefault();
+            if(company != null)
+            {
+                company.StatusId = 0;
+                foreach(Restaurant rest in company.Restaurants!)
+                {
+                    rest.StatusId = 0;
+                    foreach(Category cat in rest.Categories!)
+                    {
+                        cat.StatusId = 0;
+                        foreach(Food food in cat.Foods!)
+                        {
+                            food.StatusId = 0;
+                        }
+
+                    }
+                }
+                _context.Companies!.Update(company);
+            }
             _context.SaveChanges();
             return RedirectToAction(nameof(Index));
         }

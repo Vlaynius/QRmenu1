@@ -51,6 +51,7 @@ namespace QRmenu.Models
         [ForeignKey("StatusId")]
 		public Status? Status { get; set; }
 
+		public List<Restaurant>? Restaurants { get; set; }
     }
 }
 

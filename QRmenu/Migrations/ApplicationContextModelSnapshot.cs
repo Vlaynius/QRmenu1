@@ -255,7 +255,7 @@ namespace QRmenu.Migrations
             modelBuilder.Entity("QRmenu.Models.Category", b =>
                 {
                     b.HasOne("QRmenu.Models.Restaurant", "Restaurant")
-                        .WithMany()
+                        .WithMany("Categories")
                         .HasForeignKey("RestaurantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -304,7 +304,7 @@ namespace QRmenu.Migrations
             modelBuilder.Entity("QRmenu.Models.Restaurant", b =>
                 {
                     b.HasOne("QRmenu.Models.Company", "Company")
-                        .WithMany()
+                        .WithMany("Restaurants")
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -337,6 +337,16 @@ namespace QRmenu.Migrations
                     b.Navigation("Company");
 
                     b.Navigation("Status");
+                });
+
+            modelBuilder.Entity("QRmenu.Models.Company", b =>
+                {
+                    b.Navigation("Restaurants");
+                });
+
+            modelBuilder.Entity("QRmenu.Models.Restaurant", b =>
+                {
+                    b.Navigation("Categories");
                 });
 #pragma warning restore 612, 618
         }

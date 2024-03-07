@@ -149,8 +149,16 @@ namespace QRmenu.Controllers
         public  ActionResult DeleteConfirmed(int id)
         {
             
-            Category? category =  _context.Categories!.Find(id)!;
-            category.StatusId = 0;
+            Category? category =  _context.Categories!.Where(c=>c.Id==id).Include(c => c.Foods).FirstOrDefault();
+            if(category != null)
+            {
+                category.StatusId = 0;
+                foreach(Food food in category.Foods)
+                {
+                    food.StatusId = 0;
+                }
+            }
+            
             _context.Categories.Update(category);
              _context.SaveChanges();
             return RedirectToAction(nameof(Index));
