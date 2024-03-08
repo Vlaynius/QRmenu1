@@ -44,7 +44,7 @@ namespace QRmenu.Controllers
         // GET: Foods/Create
         public ViewResult Create()
         {
-            ViewData["CategoryId"] = new SelectList(_context.Set<Category>(),"Id", "Id");///
+            ViewData["CategoryId"] = new SelectList(_context.Set<Category>(),"Id", "Id");
             ViewData["StatusId"] = new SelectList(_context.Set<Status>(), "Id", "Name");
             return View();
         }

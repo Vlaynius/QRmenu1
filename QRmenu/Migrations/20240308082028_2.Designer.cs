@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QRmenu.Data;
 
@@ -11,9 +12,10 @@ using QRmenu.Data;
 namespace QRmenu.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20240308082028_2")]
+    partial class _2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -252,21 +254,6 @@ namespace QRmenu.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("RestaurantUser", b =>
-                {
-                    b.Property<int>("RestaurantsId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UsersId")
-                        .HasColumnType("int");
-
-                    b.HasKey("RestaurantsId", "UsersId");
-
-                    b.HasIndex("UsersId");
-
-                    b.ToTable("RestaurantUser");
-                });
-
             modelBuilder.Entity("QRmenu.Models.Category", b =>
                 {
                     b.HasOne("QRmenu.Models.Restaurant", "Restaurant")
@@ -352,21 +339,6 @@ namespace QRmenu.Migrations
                     b.Navigation("Company");
 
                     b.Navigation("Status");
-                });
-
-            modelBuilder.Entity("RestaurantUser", b =>
-                {
-                    b.HasOne("QRmenu.Models.Restaurant", null)
-                        .WithMany()
-                        .HasForeignKey("RestaurantsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("QRmenu.Models.User", null)
-                        .WithMany()
-                        .HasForeignKey("UsersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("QRmenu.Models.Category", b =>

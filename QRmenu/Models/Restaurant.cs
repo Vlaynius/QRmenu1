@@ -46,7 +46,7 @@ namespace QRmenu.Models
         public Company? Company { get; set; }
 
         public List<Category>? Categories { get; set; }
-        
+        public virtual List<User>? Users { get; set; }
         
     }
 }

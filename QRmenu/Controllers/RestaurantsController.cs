@@ -42,7 +42,6 @@ namespace QRmenu.Controllers
             {
                 return NotFound();
             }
-
             return View(restaurant);
         }
 
@@ -80,7 +79,6 @@ namespace QRmenu.Controllers
             {
                 return NotFound();
             }
-
             var restaurant = await _context.Restaurants.FindAsync(id);
             if (restaurant == null)
             {
@@ -139,7 +137,6 @@ namespace QRmenu.Controllers
             {
                 return NotFound();
             }
-
             return View(restaurant);
         }
 
@@ -149,8 +146,7 @@ namespace QRmenu.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             
-            Restaurant? restaurant =  _context.Restaurants!.Where(r=> r.Id == id).Include(r=> r.Categories).ThenInclude(r=>r.Foods)!.FirstOrDefault();
-
+            Restaurant? restaurant =  _context.Restaurants!.Where(r=> r.Id == id).Include(r=> r.Categories)!.ThenInclude(r=>r.Foods)!.FirstOrDefault();
             if(restaurant != null)
             {
                 restaurant.StatusId = 0;
@@ -162,9 +158,8 @@ namespace QRmenu.Controllers
                         food.StatusId = 0;
                     }
                 }
-            }
-                
-            _context.Restaurants!.Update(restaurant);
+            }   
+            _context.Restaurants!.Update(restaurant!);
             _context.SaveChanges();
             return RedirectToAction(nameof(Index));
         }

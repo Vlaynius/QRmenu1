@@ -165,7 +165,6 @@ namespace QRmenu.Controllers
             return View();
         }
 
-
         [HttpPost]
         public RedirectToActionResult Login(string userName, string password)
         {

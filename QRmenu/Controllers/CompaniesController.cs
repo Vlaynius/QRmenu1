@@ -22,11 +22,9 @@ namespace QRmenu
         // GET: Companies
         public async Task<IActionResult> Index()
         {
-          
             return _context.Companies != null? 
                           View(await _context.Companies.ToListAsync()) :
                           Problem("Entity set 'AppContext.Company'  is null.");
-
         }
 
         // GET: Companies/Details/5

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QRmenu.Data;
 
@@ -11,9 +12,10 @@ using QRmenu.Data;
 namespace QRmenu.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20240308075348_1")]
+    partial class _1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -186,6 +188,21 @@ namespace QRmenu.Migrations
                     b.ToTable("Restaurants");
                 });
 
+            modelBuilder.Entity("QRmenu.Models.RestaurantUser", b =>
+                {
+                    b.Property<int>("RestaurantId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("RestaurantId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RestaurantUsers");
+                });
+
             modelBuilder.Entity("QRmenu.Models.Status", b =>
                 {
                     b.Property<byte>("Id")
@@ -250,21 +267,6 @@ namespace QRmenu.Migrations
                     b.HasIndex("StatusId");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("RestaurantUser", b =>
-                {
-                    b.Property<int>("RestaurantsId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UsersId")
-                        .HasColumnType("int");
-
-                    b.HasKey("RestaurantsId", "UsersId");
-
-                    b.HasIndex("UsersId");
-
-                    b.ToTable("RestaurantUser");
                 });
 
             modelBuilder.Entity("QRmenu.Models.Category", b =>
@@ -335,6 +337,25 @@ namespace QRmenu.Migrations
                     b.Navigation("Status");
                 });
 
+            modelBuilder.Entity("QRmenu.Models.RestaurantUser", b =>
+                {
+                    b.HasOne("QRmenu.Models.Restaurant", "Restaurant")
+                        .WithMany()
+                        .HasForeignKey("RestaurantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("QRmenu.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Restaurant");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("QRmenu.Models.User", b =>
                 {
                     b.HasOne("QRmenu.Models.Company", "Company")
@@ -352,21 +373,6 @@ namespace QRmenu.Migrations
                     b.Navigation("Company");
 
                     b.Navigation("Status");
-                });
-
-            modelBuilder.Entity("RestaurantUser", b =>
-                {
-                    b.HasOne("QRmenu.Models.Restaurant", null)
-                        .WithMany()
-                        .HasForeignKey("RestaurantsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("QRmenu.Models.User", null)
-                        .WithMany()
-                        .HasForeignKey("UsersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("QRmenu.Models.Category", b =>

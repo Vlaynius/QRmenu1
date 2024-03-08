@@ -153,13 +153,12 @@ namespace QRmenu.Controllers
             if(category != null)
             {
                 category.StatusId = 0;
-                foreach(Food food in category.Foods)
+                foreach(Food food in category.Foods!)
                 {
                     food.StatusId = 0;
                 }
             }
-            
-            _context.Categories.Update(category);
+            _context.Categories?.Update(category!);
              _context.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
