@@ -29,6 +29,13 @@ namespace QRmenu.Models
 		public int CategoryId { get; set; }
 		[ForeignKey("CategoryId")]
 		public Category? Category { get; set; }
-    }
+		[NotMapped]
+		public IFormFile? Picture { get; set; }
+
+		//[Column(TypeName = "image")]
+		//public byte[]? Image { get; set; }
+
+		//public string? FileData { get; set; } 
+	}
 }
 

@@ -52,12 +52,32 @@ namespace QRmenu.Controllers
         // POST: Foods/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-		public ActionResult Create([Bind("id,Name,Price,Description,StatusId,CategoryId")] Food food)
+		public ActionResult Create([Bind("id,Name,Price,Description,StatusId,CategoryId")] Food food, IFormFile Picture )
 		{
+            FileStream fileStream;
             if (ModelState.IsValid)
             {
-                _context.Add(food);
+                //if(food.Picture != null)      //Model ile Resim yüklemek için. Database eklendiği için saveChanges metodundan önce yazılır.
+                //{
+                //    MemoryStream memoryStream = new MemoryStream();
+                //    food.Picture.CopyTo(memoryStream);
+                //    memoryStream.Flush();
+                //    food.Image = memoryStream.ToArray();
+                //    memoryStream.Close();
+                //}
+
+
+                //if(food.FileData != null)     //Binary veriyi stringe çevirerek resim yüklemek için Base64 ile yapılabilir.
+                //{
+                //    food.Image = Convert.FromBase64String(food.FileData);
+                //}
+
+                _context.Add(food); 
                 _context.SaveChanges();
+                //Arayüzden Resim yüklemek için 
+                fileStream = new FileStream(food.Id.ToString() + ".jpg", FileMode.CreateNew);
+                food.Picture.CopyTo(fileStream);
+                fileStream.Close();
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CategoryId"] = new SelectList(_context.Set<Category>(), "Id", "Id", food.Category);///
